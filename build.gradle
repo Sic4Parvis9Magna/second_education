@@ -1,0 +1,52 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+}
+
+group = 'com.sic.parvis.magna'
+version = '0.0.1-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+
+ext {
+	lombokVersion = '1.18.2'
+	swaggerVersion = '2.9.2'
+}
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation('org.postgresql:postgresql')
+//	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+//	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
+	// Swagger dependencies
+	def withoutGuava = { exclude group: 'com.google.guava', module: 'guava' }
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: "${swaggerVersion}", withoutGuava
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: "${swaggerVersion}", withoutGuava
+	implementation group: 'com.google.guava', name: 'guava', version: '27.1-jre'
+
+	//lombok
+//	compileOnly("org.projectlombok:lombok:${lombokVersion}")
+////	annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+	compileOnly 'org.projectlombok:lombok:1.18.10'
+	annotationProcessor 'org.projectlombok:lombok:1.18.10'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
