@@ -8,7 +8,7 @@ function getIndex(list, id) {
     return -1;
 }
 
-var universityApi = Vue.resource('/university{/name}')
+var universityApi = Vue.resource('/university{/name}');
 
 Vue.component('university-form', {
     props: ['universities', 'universityAttr'],
@@ -55,7 +55,7 @@ Vue.component('university-form', {
             }
         }
     }
-})
+});
 
 Vue.component('university-row', {
     props: ['university', 'editMethod', 'universities'],
@@ -80,7 +80,7 @@ Vue.component('university-row', {
             )
         }
     }
-})
+});
 
 Vue.component('universities-list', {
     props: ['universities'],
@@ -94,26 +94,35 @@ Vue.component('universities-list', {
         '<university-form :universities="universities" :universityAttr="university" />' +
         '<university-row v-for="university in universities" :key="university.id" :university="university" :editMethod="editMethod" :universities="universities" />' +
         '</div>',
-    created: function () {
-        universityApi.get().then(
-            result => result.json().then(
-                data => data.forEach(
-                    element => this.universities.push(element)
-                )
-            )
-        )
-    },
+    
     methods: {
         editMethod: function (university) {
             this.university = university;
         }
     }
-})
+});
 
 var app = new Vue({
     el: '#app',
-    template: '<universities-list :universities="universities" />',
+    template:
+    '<div>'+
+        '<div v-if="!profile"> Please pass authorisation here <a href="/login">Google</a></div>'+
+        '<div v-else>'+
+            '<div>{{profile.name}}&nbsp;<a href="/logout">Logout</a></div>'+
+            '<universities-list :universities="universities" />'+
+        '</div>'+
+    '</div>',
     data: {
-        universities: []
+        universities:frontendData.universities,
+        profile: frontendData.profile
+    },
+    created: function () {
+        // universityApi.get().then(
+        //     result => result.json().then(
+        //         data => data.forEach(
+        //             element => this.universities.push(element)
+        //         )
+        //     )
+        // )
     }
-})
+});
