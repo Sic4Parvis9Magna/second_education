@@ -34,3 +34,5 @@ out/
 
 ### Custom ###
 tmp.properties
+node_modules
+yarn.lock
