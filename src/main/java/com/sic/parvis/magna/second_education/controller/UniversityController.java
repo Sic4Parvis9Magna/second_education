@@ -6,6 +6,8 @@ import com.sic.parvis.magna.second_education.model.Views;
 import com.sic.parvis.magna.second_education.repo.UniversityRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -46,5 +48,11 @@ public class UniversityController {
     @DeleteMapping
     public void deleteUniversity(@RequestParam("id") University university) {
         universityRepo.delete(university);
+    }
+
+    @MessageMapping("/changeUniversity")
+    @SendTo("/topic/activity")
+    public University change(University university) {
+        return universityRepo.save(university);
     }
 }

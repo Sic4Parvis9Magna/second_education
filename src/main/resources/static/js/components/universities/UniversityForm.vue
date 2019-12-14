@@ -6,15 +6,16 @@
 </template>
 
 <script>
+import { sendUniversity } from 'util/ws'
 
-function getIndex(list, id) {
+/*function getIndex(list, id) {
     for (let i = 0; i < list.length; i++) {
         if (list[i].id === id) {
             return i;
         }
     }
     return -1;
-}
+}*/
 
 export default {
   props: ["universities", "universityAttr"],
@@ -32,7 +33,10 @@ export default {
   },
   methods: {
     save() {
-      const university = { name: this.name };
+      sendUniversity({id: this.id, name: this.name})
+      this.name = ''
+      this.id = ''
+      /*const university = { name: this.name };
 
       if (this.id) {
         this.$resource('/university{/name}').update({ id: this.id }, university).then(result =>
@@ -50,7 +54,7 @@ export default {
             this.name = '';
           })
         );
-      }
+      }*/
     }
   }
 };

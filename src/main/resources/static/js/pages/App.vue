@@ -16,6 +16,8 @@
 
 <script>
 import UniversitiesList from "components/universities/UniversitiesList.vue";
+import { addHandler } from 'util/ws'
+import { getIndex } from 'util/collections'
 
 export default {
   components: {
@@ -26,6 +28,16 @@ export default {
       universities: frontendData.universities,
       profile: frontendData.profile
     };
+  },
+  created() {
+    addHandler(data => {
+      let index = getIndex(this.universities, data.id)
+      if (index > -1) {
+        this.universities.splice(index, 1, data)
+      } else {
+        this.universities.push(data)
+      }
+    })
   }
 };
 </script>
