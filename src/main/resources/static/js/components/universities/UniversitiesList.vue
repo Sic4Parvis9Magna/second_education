@@ -15,6 +15,7 @@
 <script>
 import UniversityRow from 'components/universities/UniversityRow.vue'
 import UniversityForm from 'components/universities/UniversityForm.vue'
+import universitiesApi from 'api/universities'
 
 export default {
    components: {
@@ -36,7 +37,7 @@ export default {
       this.university = university
     },
     deleteUniversity(university) {
-      this.$resource('/university{/name}').remove({ id: university.id }).then(result => {
+      universitiesApi.remove(university.id).then(result => {
         if (result.ok) {
           this.universities.splice(this.universities.indexOf(university),1)
         }

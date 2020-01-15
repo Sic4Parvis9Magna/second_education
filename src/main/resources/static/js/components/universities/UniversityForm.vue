@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { sendUniversity } from "util/ws";
+import universitiesApi from 'api/universities'
 
 export default {
   props: ["universities", "universityAttr"],
@@ -24,7 +24,28 @@ export default {
   },
   methods: {
     save() {
-      sendUniversity({ id: this.id, name: this.name });
+      const university = {id: this.id, name: this.name}
+
+      if (this.id) {
+          universitiesApi.update(university).then( result => 
+          result.json().then(data => {
+            const index = this.universities.findIndex(item => item.id === data.id)
+            this.universities.splice(index, 1, data)
+          })
+          )
+      } else {
+          universitiesApi.add(university).then( result =>
+            result.json().then(data => {
+              const index = this.universities.findIndex(item => item.id === data.id)
+              if (index > -1) {
+                  this.universities.splice(index, 1 , data)
+              } else {
+                this.universities.push(data)
+              }
+            })
+          )
+      }
+
       this.name = "";
       this.id = "";
     }
