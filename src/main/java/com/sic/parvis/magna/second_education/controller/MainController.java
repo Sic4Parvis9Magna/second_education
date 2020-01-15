@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/")
@@ -26,8 +27,10 @@ public class MainController {
     public String main(Model model, @AuthenticationPrincipal User user) {
         HashMap<Object, Object> data = new HashMap<>();
 
-        data.put("profile", user);
-        data.put("universities", universityRepo.findAll());
+        if (Objects.nonNull(user)) {
+            data.put("profile", user);
+            data.put("universities", universityRepo.findAll());
+        }
 
         model.addAttribute("frontendData", data);
 //        model.addAttribute("isDevMode", "dev".equals(profile));

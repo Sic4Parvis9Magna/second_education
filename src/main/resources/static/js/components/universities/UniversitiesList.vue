@@ -1,15 +1,15 @@
 <template>
-  <div style="position: relative; width: 300px;">
+  <v-layout align-space-around justify-start column>
     <university-form :universities="universities" :universityAttr="university" />
     <university-row
-      v-for="university in universities"
+      v-for="university in sortedUniversities"
       :key="university.id"
       :university="university"
       :editUniversity="editUniversity"
       :deleteUniversity="deleteUniversity"
       :universities="universities"
     />
-  </div>
+  </v-layout>
 </template>
 
 <script>
@@ -24,6 +24,11 @@ export default {
   data() {
     return {
       university: null
+    }
+  },
+  computed: {
+    sortedUniversities() {
+      return this.universities.sort((a,b) => -(a.id - b.id))
     }
   },
   methods: {
