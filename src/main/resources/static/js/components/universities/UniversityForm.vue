@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import universitiesApi from 'api/universities'
+import { mapActions } from 'vuex'
 
 export default {
-  props: ["universities", "universityAttr"],
+  props: ["universityAttr"],
   data() {
     return {
       name: "",
@@ -23,27 +23,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['addUniversityAction','updateUniversityAction']),
     save() {
       const university = {id: this.id, name: this.name}
 
       if (this.id) {
-          universitiesApi.update(university).then( result => 
-          result.json().then(data => {
-            const index = this.universities.findIndex(item => item.id === data.id)
-            this.universities.splice(index, 1, data)
-          })
-          )
+          this.updateUniversityAction(university)
       } else {
-          universitiesApi.add(university).then( result =>
-            result.json().then(data => {
-              const index = this.universities.findIndex(item => item.id === data.id)
-              if (index > -1) {
-                  this.universities.splice(index, 1 , data)
-              } else {
-                this.universities.push(data)
-              }
-            })
-          )
+          this.addUniversityAction(university)
       }
 
       this.name = "";

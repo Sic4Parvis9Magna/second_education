@@ -15,14 +15,17 @@
 
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  props: ["university", "editUniversity", "deleteUniversity", "universities"],
+  props: ["university", "editUniversity"],
   methods: {
+    ...mapActions(['removeUniversityAction']),
     edit() {
       this.editUniversity(this.university)
     },
     del() {
-      this.deleteUniversity(this.university)
+      this.removeUniversityAction(this.university)
     }
   }
 }
