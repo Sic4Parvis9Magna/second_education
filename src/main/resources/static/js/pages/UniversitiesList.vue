@@ -1,4 +1,5 @@
 <template>
+<v-container>
   <v-layout align-space-around justify-start column>
     <university-form :universityAttr="university" />
     <university-row
@@ -8,6 +9,7 @@
       :editUniversity="editUniversity"
     />
   </v-layout>
+</v-container>
 </template>
 
 <script>

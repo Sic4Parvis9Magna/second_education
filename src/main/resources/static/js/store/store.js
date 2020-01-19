@@ -10,7 +10,7 @@ export default new Vuex.Store({
         profile: frontendData.profile
     },
     getters: {
-        sortedUniversities: state => state.universities.sort((a, b) => -(a.id - b.id))
+        sortedUniversities: state => (state.universities || []).sort((a, b) => -(a.id - b.id))
     },
     mutations: {
         addUniversityMutation(state, university) {
