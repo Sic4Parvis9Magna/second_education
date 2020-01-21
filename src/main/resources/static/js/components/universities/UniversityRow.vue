@@ -4,6 +4,7 @@
     <i>({{ university.id }})</i>
     {{ university.name }}
     </v-card-text>
+    <media v-if="university.link" :university="university"></media>
     <v-card-actions>
       <v-btn @click="edit" text small rounded>Edit</v-btn>
       <v-btn icon @click="del" small>
@@ -16,9 +17,11 @@
 
 <script>
 import { mapActions } from 'vuex'
+import Media from 'components/media/Media.vue'
 
 export default {
   props: ["university", "editUniversity"],
+  components:{ Media },
   methods: {
     ...mapActions(['removeUniversityAction']),
     edit() {

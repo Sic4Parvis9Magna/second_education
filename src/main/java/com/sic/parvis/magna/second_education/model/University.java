@@ -29,4 +29,14 @@ public class University {
     public University(String name) {
         this.name = name;
     }
+
+    @JsonView(Views.WithData.class)
+    private String link;
+    @JsonView(Views.WithData.class)
+    private String linkTitle;
+    @JsonView(Views.WithData.class)
+    private String linkDescription;
+    @JsonView(Views.WithData.class)
+    private String linkCover;
+
 }
