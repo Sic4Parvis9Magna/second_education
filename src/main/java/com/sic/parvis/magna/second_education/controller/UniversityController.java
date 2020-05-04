@@ -5,6 +5,7 @@ import com.sic.parvis.magna.second_education.dto.EventType;
 import com.sic.parvis.magna.second_education.dto.MetaDto;
 import com.sic.parvis.magna.second_education.dto.ObjectType;
 import com.sic.parvis.magna.second_education.model.University;
+import com.sic.parvis.magna.second_education.model.User;
 import com.sic.parvis.magna.second_education.model.Views;
 import com.sic.parvis.magna.second_education.repo.UniversityRepo;
 import com.sic.parvis.magna.second_education.util.WsSender;
@@ -13,15 +14,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RestController
@@ -34,12 +34,14 @@ public class UniversityController {
     private static Pattern IMAGE_REGEX = Pattern.compile(IMAGE_PATTERN, Pattern.CASE_INSENSITIVE);
 
     private final UniversityRepo universityRepo;
-    private final BiConsumer<EventType, University> wsSender;
+    private final BiConsumer<EventType, University> wsSenderIdName;
+    private final BiConsumer<EventType, University> wsSenderWithData;
 
     @Autowired
     public UniversityController(UniversityRepo universityRepo, WsSender wsSender) {
         this.universityRepo = universityRepo;
-        this.wsSender = wsSender.getSender(ObjectType.MESSAGE, Views.IdName.class);
+        this.wsSenderIdName = wsSender.getSender(ObjectType.MESSAGE, Views.IdName.class);
+        this.wsSenderWithData = wsSender.getSender(ObjectType.MESSAGE, Views.WithData.class);
     }
 
 
@@ -55,21 +57,24 @@ public class UniversityController {
     }
 
     @PostMapping
-    public University createUniversity(@RequestBody University university) {
+    public University createUniversity(@RequestBody University university,
+                                       @AuthenticationPrincipal User user) {
         university.setAdded(LocalDateTime.now());
         fillMeta(university);
+        university.setAuthor(user);
         University createdUniversity = universityRepo.save(university);
-        wsSender.accept(EventType.CREATE, createdUniversity);
+        wsSenderIdName.accept(EventType.CREATE, createdUniversity);
 
         return createdUniversity;
     }
 
     @PutMapping
-    public University updateUniversity(@RequestParam("id") University entityFromDb, @RequestBody University updatedEntity) {
-        BeanUtils.copyProperties(updatedEntity, entityFromDb, "id");
+    @JsonView(Views.WithData.class)
+    public University updateUniversityName(@RequestParam("id") University entityFromDb, @RequestBody University updatedEntity) {
         fillMeta(entityFromDb);
+        entityFromDb.setName(updatedEntity.getName());
         University updatedUniversity = universityRepo.save(entityFromDb);
-        wsSender.accept(EventType.UPDATE, updatedEntity);
+        wsSenderWithData.accept(EventType.UPDATE, updatedEntity);
 
         return updatedUniversity;
     }
@@ -77,7 +82,8 @@ public class UniversityController {
     @DeleteMapping
     public void deleteUniversity(@RequestParam("id") University university) {
         universityRepo.delete(university);
-        wsSender.accept(EventType.REMOVE, university);
+        //TODO check if we need it
+        wsSenderIdName.accept(EventType.REMOVE, new University(university.getId(), university.getName()));
     }
 
     private void fillMeta(University university) {

@@ -10,7 +10,8 @@
 
     <title>Second_education</title>
     <script th:inline="javascript">
-        var frontendData = [[${ frontendData }]];
+        var frontendData = [[${ frontendData }]]
+        var universities = [# th:utext="${universities}" /]
     </script>
 </head>
 

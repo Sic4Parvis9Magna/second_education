@@ -1,12 +1,17 @@
 <template>
   <v-layout>
-    <v-text-field label="New university" placeholder="Write something" v-model="name" />
+    <v-text-field 
+    label="New university"
+    placeholder="Write something"
+    v-model="name" 
+    @keyup.enter="save"
+    />
     <v-btn @click="save">Save</v-btn>
   </v-layout>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 
 export default {
   props: ["universityAttr"],
@@ -23,14 +28,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addUniversityAction','updateUniversityAction']),
+    ...mapActions(["addUniversityAction", "updateUniversityAction"]),
     save() {
-      const university = {id: this.id, name: this.name}
+      const university = { id: this.id, name: this.name };
 
       if (this.id) {
-          this.updateUniversityAction(university)
+        this.updateUniversityAction(university);
       } else {
-          this.addUniversityAction(university)
+        this.addUniversityAction(university);
       }
 
       this.name = "";

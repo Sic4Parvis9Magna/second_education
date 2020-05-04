@@ -20,7 +20,7 @@ public class WsSender {
     private final ObjectMapper mapper;
 
     public <T> BiConsumer<EventType, T> getSender(ObjectType objectType, Class view) {
-//        mapper.setConfig(mapper.getSerializationConfig().withView(view));
+        mapper.setConfig(mapper.getSerializationConfig().withView(view));
 
         return (EventType eventType, T payload) -> {
             String value = null;

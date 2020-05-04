@@ -1,5 +1,5 @@
 <template>
-  <v-card class="my-2">
+  <v-card class="my-2" v-if="university.name">
     <v-card-text primary-title>
     <i>({{ university.id }})</i>
     {{ university.name }}
@@ -11,6 +11,10 @@
         <v-icon>delete</v-icon>
       </v-btn>
     </v-card-actions>
+  <comment-list
+  :comments="university.comments"
+  :university-id="university.id"
+  ></comment-list>
   </v-card>
 </template>
 
@@ -18,10 +22,12 @@
 <script>
 import { mapActions } from 'vuex'
 import Media from 'components/media/Media.vue'
+import CommentList from 'components/comment/CommentList.vue'
+
 
 export default {
   props: ["university", "editUniversity"],
-  components:{ Media },
+  components:{ Media, CommentList },
   methods: {
     ...mapActions(['removeUniversityAction']),
     edit() {
