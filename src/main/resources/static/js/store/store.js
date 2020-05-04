@@ -41,17 +41,19 @@ export default new Vuex.Store({
             const updateIndex = state.universities.findIndex(item => item.id === comment.universityId)
             const university = state.universities[updateIndex]
             
-            state.universities = [
-                ...state.universities.slice(0, updateIndex),
-                {
-                    ...university,
-                    comments: [
-                        ...university.comments,
-                        comment
-                    ]
-                },
-                ...state.universities.slice(updateIndex + 1)
-            ]
+            if (!university.comments.find(it => it.id === comment.id)) {
+                state.universities = [
+                    ...state.universities.slice(0, updateIndex),
+                    {
+                        ...university,
+                        comments: [
+                            ...university.comments,
+                            comment
+                        ]
+                    },
+                    ...state.universities.slice(updateIndex + 1)
+                ]
+            }
         }
     },
     actions: {

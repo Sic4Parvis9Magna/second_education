@@ -1,7 +1,6 @@
 package com.sic.parvis.magna.second_education.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -18,6 +17,10 @@ import java.util.List;
 @Table
 @ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = {"id"})
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id"
+//)
 public class University {
     //    private List<Department> departments;
     //    private Country country;
@@ -49,6 +52,7 @@ public class University {
 
     @OneToMany(mappedBy = "university", orphanRemoval = true)
     @JsonView(Views.WithData.class)
+//    @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
     @JsonView(Views.WithData.class)

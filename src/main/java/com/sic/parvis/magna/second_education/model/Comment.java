@@ -1,5 +1,6 @@
 package com.sic.parvis.magna.second_education.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Comment {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "university_id")
+//    @JsonBackReference
     private University university;
 
     @OneToOne

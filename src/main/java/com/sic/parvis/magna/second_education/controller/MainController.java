@@ -37,7 +37,7 @@ public class MainController {
             data.put("profile", user);
             model.addAttribute("universities", getFormattedUniversities());
         } else {
-            model.addAttribute("universities", "{}");
+            model.addAttribute("universities", "[]");
         }
 
         model.addAttribute("frontendData", data);

@@ -22,6 +22,8 @@ public class CommentController {
     @JsonView(Views.WithData.class)
     public CommentDto createComment(@RequestBody CommentDto commentDto,
                                                 @AuthenticationPrincipal User user) {
-        return new CommentDto(commentsService.create(commentDto, user));
+        var savedComment = commentsService.create(commentDto, user);
+
+        return new CommentDto(savedComment);
     }
 }
