@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         universities: universities || [],
-        profile: frontendData.profile
+        ...frontendData
     },
     getters: {
         sortedUniversities: state => (state.universities || []).sort((a, b) => -(a.id - b.id))
@@ -54,6 +54,21 @@ export default new Vuex.Store({
                     ...state.universities.slice(updateIndex + 1)
                 ]
             }
+        },
+        addUniversityPageMutation(state, universities) {
+            const targetUniversities = state.universities
+                .concat(universities)
+                .reduce((res, val) => {
+                    res[val.id] = val
+                    return res
+                }, {})
+            state.universities = Object.values(targetUniversities)
+        },
+        updateTotalPagesMutation(state, totalPages) {
+            state.totalPages = totalPages
+        },
+        updateCurrentPageMutation(state, currentPage) {
+            state.currentPage = currentPage
         }
     },
     actions: {
@@ -83,6 +98,13 @@ export default new Vuex.Store({
             const response = await commentApi.add(comment)
             const data = await response.json()
             commit('addCommentMutation', data)
+        },
+        async loadPageAction({commit, state}) {
+            const response = await universitiesApi.page(state.currentPage + 1)
+            const data = await response.json()
+            commit('addUniversityPageMutation', data.universities)
+            commit('updateTotalPagesMutation', data.totalPages)
+            commit('updateCurrentPageMutation', Math.min(data.currentPage, data.totalPages - 1))
         }
     }
 })

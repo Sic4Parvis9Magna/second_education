@@ -1,8 +1,8 @@
 package com.sic.parvis.magna.second_education.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
@@ -20,12 +20,12 @@ public class Comment {
     @JsonView(Views.IdName.class)
     private String text;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "university_id")
 //    @JsonBackReference
     private University university;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonView(Views.WithData.class)
     private User author;
