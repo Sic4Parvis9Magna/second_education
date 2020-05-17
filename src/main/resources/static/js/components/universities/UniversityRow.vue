@@ -1,29 +1,11 @@
 <template>
   <v-card class="my-2" v-if="university.name">
     <v-card-text primary-title>
-      <div>
-        
-
-        <v-avatar
-          v-if="university.author && university.author.userpic"
-          size="48px"
-        >
-          <img
-            :src="university.author.userpic"
-            :alt="university.author.name"
-          >
-        </v-avatar>
-        <v-avatar 
-          v-else
-          size="48px"
-          color="indigo"
-        >
-          <v-icon dark>mdi-account-circle</v-icon>
-        </v-avatar>
-        <span class="pl-3">{{ authorName }}</span>
-      </div>
+      <user-link
+        :user="university.author"
+        size="36px"
+      ></user-link>
       <div class="pt-3">
-        <!-- <i>({{ university.id }})</i> -->
         {{ university.name }}
       </div>
     </v-card-text>
@@ -46,16 +28,12 @@
 import { mapActions } from 'vuex'
 import Media from 'components/media/Media.vue'
 import CommentList from 'components/comment/CommentList.vue'
+import UserLink from 'components/UserLink.vue'
 
 
 export default {
   props: ["university", "editUniversity"],
-  components: { Media, CommentList },
-  computed: {
-    authorName() {
-      return this.university.author ? this.university.author.name : 'unknown'
-    }
-  },
+  components: { Media, CommentList, UserLink },
   methods: {
     ...mapActions(['removeUniversityAction']),
     edit() {

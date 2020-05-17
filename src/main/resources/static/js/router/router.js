@@ -9,7 +9,7 @@ Vue.use(VueRouter)
 const routes = [
     { path: '/', component: UniversitiesList },
     { path: '/auth', component: Auth },
-    { path: '/profile', component: Profile },
+    { path: '/user/:id?', component: Profile },
     { path: '*', component: UniversitiesList }
 ]
 
