@@ -22,7 +22,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import { addHandler } from "util/ws";
+import { addHandler, connect } from "util/ws";
 
 export default {
   computed: mapState(["profile"]),
@@ -41,6 +41,7 @@ export default {
     }
   },
   created() {
+    connect()
     addHandler(data => {
       if (data.objectType === "MESSAGE") {
         switch (data.eventType) {
