@@ -23,8 +23,10 @@ public class UniversityController {
 
     @GetMapping
     @JsonView(Views.WithData.class)
-    public UniversityPageDto listUniversities(@PageableDefault(size = PAGE_SIZE, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return universityService.findAll(pageable);
+    public UniversityPageDto listUniversities(
+            @AuthenticationPrincipal User user,
+            @PageableDefault(size = PAGE_SIZE, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return universityService.findForUser(pageable, user);
     }
 
     @GetMapping("/{id}")

@@ -50,7 +50,7 @@ public class MainController {
             var userFromDB = userDetailsRepo.findById(user.getId()).get();
             model.addAttribute("profile", getFormattedUser(userFromDB));
 
-            var dto = getInitialUniversities();
+            var dto = getInitialUniversities(user);
             data.put("currentPage", dto.getCurrentPage());
             data.put("totalPages", dto.getTotalPages());
             model.addAttribute("universities", getFormattedUniversities(dto.getUniversities()));
@@ -75,10 +75,10 @@ public class MainController {
         return profileWriter.writeValueAsString(user);
     }
 
-    private UniversityPageDto getInitialUniversities() {
+    private UniversityPageDto getInitialUniversities(User user) {
         var sort = Sort.by(Sort.Direction.DESC, "id");
         var pageable = PageRequest.of(0, UniversityController.PAGE_SIZE, sort);
 
-        return  universityService.findAll(pageable);
+        return  universityService.findForUser(pageable, user);
     }
 }
