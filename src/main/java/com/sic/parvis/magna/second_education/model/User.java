@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "usr")
 @Data
-@ToString(of = {"id", "name", "userpic", "gender", "locale", "lastVisit", "email"})
+@ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = {"id"})
 public class User implements Serializable {
     @Id
@@ -33,31 +33,11 @@ public class User implements Serializable {
     @JsonView(Views.FullProfile.class)
     private LocalDateTime lastVisit;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_subscriptions",
-            joinColumns = @JoinColumn(name = "subscriber_id"),
-            inverseJoinColumns = @JoinColumn(name = "channel_id")
-    )
     @JsonView(Views.FullProfile.class)
-    @JsonIdentityInfo(
-            property = "id",
-            generator = ObjectIdGenerators.PropertyGenerator.class
-    )
-    @JsonIdentityReference
-    private Set<User> subscriptions = new HashSet<>();
+    @OneToMany(mappedBy = "subscriber", orphanRemoval = true)
+    private Set<UserSubscription> subscriptions = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_subscriptions",
-            joinColumns = @JoinColumn(name = "channel_id"),
-            inverseJoinColumns = @JoinColumn(name = "subscriber_id")
-    )
     @JsonView(Views.FullProfile.class)
-    @JsonIdentityInfo(
-            property = "id",
-            generator = ObjectIdGenerators.PropertyGenerator.class
-    )
-    @JsonIdentityReference
-    private Set<User> subscribers = new HashSet<>();
+    @OneToMany(mappedBy = "channel", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<UserSubscription> subscribers = new HashSet<>();
 }
