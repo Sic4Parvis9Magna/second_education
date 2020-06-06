@@ -32,8 +32,8 @@ import java.util.stream.Collectors;
 public class UniversityService {
     private static final String URL_PATTERN = "https?:\\/\\/?[\\w\\d\\._\\-%\\/\\?=&#]+";
     private static final String IMAGE_PATTERN = "\\.(jpeg|jpg|gif|png)$";
-    private static Pattern URL_REGEX = Pattern.compile(URL_PATTERN, Pattern.CASE_INSENSITIVE);
-    private static Pattern IMAGE_REGEX = Pattern.compile(IMAGE_PATTERN, Pattern.CASE_INSENSITIVE);
+    private static final Pattern URL_REGEX = Pattern.compile(URL_PATTERN, Pattern.CASE_INSENSITIVE);
+    private static final Pattern IMAGE_REGEX = Pattern.compile(IMAGE_PATTERN, Pattern.CASE_INSENSITIVE);
 
 
     private final UniversityRepo universityRepo;
@@ -120,7 +120,9 @@ public class UniversityService {
     }
 
     public UniversityPageDto findForUser(Pageable pageable, User user) {
-        List<User> channels = userSubscriptionRepo.findBySubscriber(user).stream()
+        List<User> channels = userSubscriptionRepo.findBySubscriber(user)
+                .stream()
+                .filter(UserSubscription::isActive)
                 .map(UserSubscription::getChannel)
                 .collect(Collectors.toList());
 

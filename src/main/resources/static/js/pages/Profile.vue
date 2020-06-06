@@ -14,7 +14,17 @@
                             <v-flex v-if="profile.gender">Gender: {{profile.gender}}</v-flex>
                             <v-flex>Last visit: {{profile.lastVisit}}</v-flex>
                             <v-flex>Subscriptions: {{ subscriptionsCount }} </v-flex>
-                            <v-flex>Subscribers: {{ subscribersCount }} </v-flex>
+                            <router-link
+                                v-if="isMyProfile"
+                                :to="`/subscriptions/${profile.id}`"
+                            >
+                                Subscribers: {{ subscribersCount }}
+                            </router-link>
+                            <v-flex
+                                v-else
+                            >
+                                Subscribers: {{ subscribersCount }}
+                             </v-flex>
                         </v-layout>
                     </v-flex>
                 </v-layout>
