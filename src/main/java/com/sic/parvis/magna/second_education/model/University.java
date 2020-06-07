@@ -17,13 +17,7 @@ import java.util.List;
 @Table
 @ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = {"id"})
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id"
-//)
 public class University {
-    //    private List<Department> departments;
-    //    private Country country;
 
     public University(Long id, String name) {
         this.id = id;
@@ -52,7 +46,6 @@ public class University {
 
     @OneToMany(mappedBy = "university", orphanRemoval = true)
     @JsonView(Views.WithData.class)
-//    @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
     @JsonView(Views.WithData.class)

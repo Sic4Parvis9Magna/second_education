@@ -104,7 +104,7 @@ public class UniversityService {
         fillMeta(entityFromDb);
         entityFromDb.setName(updatedEntity.getName());
         University updatedUniversity = universityRepo.save(entityFromDb);
-        wsSenderWithData.accept(EventType.UPDATE, updatedEntity);
+        wsSenderWithData.accept(EventType.UPDATE, updatedUniversity);
 
         return updatedUniversity;
     }
