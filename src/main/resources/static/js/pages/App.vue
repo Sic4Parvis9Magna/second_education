@@ -41,7 +41,6 @@ export default {
     }
   },
   created() {
-    connect()
     addHandler(data => {
       if (data.objectType === "MESSAGE") {
         switch (data.eventType) {
